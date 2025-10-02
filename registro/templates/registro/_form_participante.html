@@ -1,0 +1,21 @@
+<section>
+    <h2 class="h4 mb-3">Participantes</h2>
+    {{ formset.management_form }}
+    {% for form in formset %}
+    <div class="card mb-3">
+        <div class="card-body">
+            {{ form.non_field_errors }}
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                {{ form.nombre }}
+                <div class="text-danger small">{{ form.nombre.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                {{ form.email }}
+                <div class="text-danger small">{{ form.email.errors }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>

@@ -8,7 +8,9 @@ class EventoForm(forms.ModelForm):
         model = Evento
         fields = ['nombre', 'ubicacion', 'fecha']
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'}) #Para que aparezca un selector de fecha en vez de un input de texto
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'ubicacion': forms.TextInput(attrs={'class': 'form-control'}),
         }
 #MEtodo para validar que la fecha sea futura
     def clean_fecha(self):
@@ -28,6 +30,10 @@ class ParticipanteForm(forms.ModelForm):
     class Meta:
         model = Participante
         fields = ['nombre', 'email']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
 #Conjunto de formularios para manejar varios participantes a la vez
-ParticipanteFormSet = modelformset_factory(Participante, form=ParticipanteForm, extra=1, can_delete=True, validate_min=True)
+ParticipanteFormSet = modelformset_factory(Participante, form=ParticipanteForm, extra=3, validate_min=True)

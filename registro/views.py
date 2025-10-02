@@ -1,35 +1,29 @@
 from django.shortcuts import render, redirect
-from django.contrib import menssages
-from django.forms import modelformset_factory
+from django.contrib import messages
 from django.db import transaction
-from .forms import EventoForm, ParticipanteForm, ParticipanteFormSet
-from .models import Evento, Participante
+from .forms import EventoForm, ParticipanteFormSet 
+from .models import Participante
 
-# Create your views here.
 @transaction.atomic
 def registrar_evento(request):
-    ParticipanteFormSet = modelformset_factory(Participante, form=ParticipanteForm, extra=1, can_delete=True, validate_min=True)
-    
-    if request.method == "POST":
+    if request.method == 'POST':
         evento_form = EventoForm(request.POST)
         formset = ParticipanteFormSet(request.POST, queryset=Participante.objects.none())
-        
         if evento_form.is_valid() and formset.is_valid():
-            evento = evento_form.save() #Guardamos el evento primero
-            for form in formset: #Luego guardamos los participantes asociandolos al evento
-                if form.cleaned_data and not form.cleaned_data.get["DELETE", False]:
-                    participante = form.save(commit=False)
-                    participante.evento = evento
-                    participante.save()
-            menssages.success(request, "¡Evento registrado exitosamente!")
-            return redirect('registro_exitoso')
+            evento = evento_form.save()
+            for form in formset:
+                if form.cleaned_data and not form.cleaned_data.get("DELETE", False):
+                    p = form.save(commit=False)
+                    p.evento = evento
+                    p.save()
+            messages.success(request, "¡Evento registrado con éxito!")
+            return redirect('registro_exito')
         else:
-            menssages.error(request, "Revisa los errores del formulario")
+            messages.error(request, "Revisa los errores del formulario.")
     else:
         evento_form = EventoForm()
-        formset = ParticipanteFormSet(queryset=Participante.objects.none())
-
-    return render(request, "registro/registrar_evento.html", {'evento_form': evento_form, "formset": formset})
+        formset = ParticipanteFormSet(queryset=Participante.objects.none())  # <-- aquí
+    return render(request, 'registro/registrar_evento.html', {'evento_form': evento_form, 'formset': formset})
 
 def registro_exitoso(request):
     return render(request, "registro/registro_exitoso.html")

@@ -1,0 +1,21 @@
+<section class="mb-4">
+    <h2 class="h4 mb-3">Datos del evento</h2>
+
+    <div class="mb-3">
+        <label class="form-label">Nombre del evento</label>
+        {{ evento_form.nombre }}
+        <div class="text-danger small">{{ evento_form.nombre.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha</label>
+        {{ evento_form.fecha }}
+        <div class="text-danger small">{{ evento_form.fecha.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ubicación (opcional)</label>
+        {{ evento_form.ubicacion }}
+        <div class="text-danger small">{{ evento_form.ubicacion.errors }}</div>
+    </div>
+</section>
