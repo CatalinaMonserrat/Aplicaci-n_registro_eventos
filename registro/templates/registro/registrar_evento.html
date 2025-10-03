@@ -6,6 +6,51 @@
   {% csrf_token %}
   {% include 'registro/_form_evento.html' %}
   {% include 'registro/_form_participante.html' %}
-  <button type="submit" class="btn btn-primary">Guardar evento</button>
+
+  <button type="submit" class="btn btn-primary mt-3">Guardar evento</button>
 </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("formset-container");
+  const addBtn = document.getElementById("add-participante");
+  const template = document.getElementById("empty-form-template");
+  // Detecta cualquier prefijo (form-, participantes-, etc.)
+  const totalFormsInput = document.querySelector('input[name$="-TOTAL_FORMS"]');
+
+  if (!container || !addBtn || !template || !totalFormsInput) return;
+
+  function addForm() {
+    const index = parseInt(totalFormsInput.value, 10);
+    const clone = document.importNode(template.content, true);
+
+    clone.querySelectorAll("input, select, textarea, label").forEach(el => {
+      if (el.name) el.name = el.name.replace(/__prefix__/g, index);
+      if (el.id) el.id = el.id.replace(/__prefix__/g, index);
+      if (el.htmlFor) el.htmlFor = el.htmlFor.replace(/__prefix__/g, index);
+
+      // limpiar valores
+      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        if (el.type !== "checkbox" && el.type !== "radio") el.value = "";
+        if (el.type === "checkbox" || el.type === "radio") el.checked = false;
+      }
+    });
+
+    container.appendChild(clone);
+    totalFormsInput.value = index + 1; // actualizar contador
+  }
+
+  addBtn.addEventListener("click", addForm);
+
+  // Quitar filas agregadas por JS (no reindexamos, no hace falta)
+  container.addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("remove-participante")) {
+      const card = e.target.closest(".participante-form");
+      if (card) card.remove();
+    }
+  });
+});
+</script>
 {% endblock %}

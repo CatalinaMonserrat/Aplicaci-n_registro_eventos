@@ -1,21 +1,58 @@
-<section>
+<section class="mb-4">
     <h2 class="h4 mb-3">Participantes</h2>
+
     {{ formset.management_form }}
-    {% for form in formset %}
-    <div class="card mb-3">
-        <div class="card-body">
+
+    <div id="formset-container">
+        {% for form in formset %}
+        <div class="card mb-3 participante-form">
+            <div class="card-body">
             {{ form.non_field_errors }}
+
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
                 {{ form.nombre }}
                 <div class="text-danger small">{{ form.nombre.errors }}</div>
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Correo electrónico</label>
                 {{ form.email }}
                 <div class="text-danger small">{{ form.email.errors }}</div>
             </div>
+
+            {% if formset.can_delete %}
+                <div class="form-check">
+                {{ form.DELETE }} <label class="form-check-label">Eliminar</label>
+                </div>
+            {% endif %}
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
+    <!-- Botón para agregar participantes -->
+    <div class="d-flex gap-2 mt-2 mb-3">
+        <button type="button" id="add-participante" class="btn btn-secondary">
+        + Agregar participante
+        </button>
+    </div>
+
+    <template id="empty-form-template">
+        <div class="card mb-3 participante-form">
+        <div class="card-body">
+            <div class="mb-3">
+            <label class="form-label" for="{{ formset.empty_form.nombre.id_for_label }}">Nombre</label>
+            {{ formset.empty_form.nombre }}
+            </div>
+            <div class="mb-3">
+            <label class="form-label" for="{{ formset.empty_form.email.id_for_label }}">Correo electrónico</label>
+            {{ formset.empty_form.email }}
+            </div>
+            <button type="button" class="btn btn-outline-danger btn-sm remove-participante">
+            Quitar este participante
+            </button>
+        </div>
+        </div>
+    </template>
 </section>

@@ -22,7 +22,7 @@ def registrar_evento(request):
             messages.error(request, "Revisa los errores del formulario.")
     else:
         evento_form = EventoForm()
-        formset = ParticipanteFormSet(queryset=Participante.objects.none())  # <-- aquí
+        formset = ParticipanteFormSet(request.POST or None, queryset=Participante.objects.none())
     return render(request, 'registro/registrar_evento.html', {'evento_form': evento_form, 'formset': formset})
 
 def registro_exitoso(request):

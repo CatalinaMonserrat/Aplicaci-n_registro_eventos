@@ -36,4 +36,4 @@ class ParticipanteForm(forms.ModelForm):
         }
 
 #Conjunto de formularios para manejar varios participantes a la vez
-ParticipanteFormSet = modelformset_factory(Participante, form=ParticipanteForm, extra=3, validate_min=True)
+ParticipanteFormSet = modelformset_factory(Participante, form=ParticipanteForm, extra=1, can_delete=True, validate_min=True)
